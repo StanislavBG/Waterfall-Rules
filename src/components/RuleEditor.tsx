@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Typography, CircularProgress, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Box, Button, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { Rule, RuleAction } from '../types/Rule';
 import RuleComponent from './RuleComponent';
 import { motion } from 'framer-motion';
 
-const RULESETS_URL = 'http://localhost:5000/api/rule-sets';
-const RULESET_RULES_URL = 'http://localhost:5000/api/ruleset';
+// Default rule sets
+const DEFAULT_RULE_SETS = ['Default Rules', 'Custom Rules'];
 
 const getNextRuleName = (rules: Rule[]): string => {
   let max = 0;
@@ -47,30 +47,27 @@ function findParentAndIndexWithSiblings(rules: Rule[], id: string, parent: Rule 
 }
 
 const RuleEditor: React.FC = () => {
-  const [rules, setRules] = useState<Rule[] | null>(null);
-  const [ruleSets, setRuleSets] = useState<string[]>([]);
-  const [selectedRuleSet, setSelectedRuleSet] = useState<string>('');
+  const [rules, setRules] = useState<Rule[]>([]);
+  const [ruleSets] = useState<string[]>(DEFAULT_RULE_SETS);
+  const [selectedRuleSet, setSelectedRuleSet] = useState<string>(DEFAULT_RULE_SETS[0]);
   const [editDescId, setEditDescId] = useState<string | null>(null);
   const [editDescValue, setEditDescValue] = useState('');
 
-  // Fetch rule sets and select default on mount
+  // Load rules from localStorage on mount and when rule set changes
   useEffect(() => {
-    fetch(RULESETS_URL)
-      .then(res => res.json())
-      .then(labels => {
-        setRuleSets(labels);
-        const defaultLabel = labels.find((l: string) => l.toLowerCase().includes('default')) || labels[0];
-        setSelectedRuleSet(defaultLabel);
-      });
-  }, []);
-
-  // Fetch rules for selected rule set
-  useEffect(() => {
-    if (!selectedRuleSet) return;
-    fetch(`${RULESET_RULES_URL}?label=${encodeURIComponent(selectedRuleSet)}`)
-      .then(res => res.json())
-      .then(data => setRules(data));
+    const savedRules = localStorage.getItem(`rules_${selectedRuleSet}`);
+    if (savedRules) {
+      setRules(JSON.parse(savedRules));
+    } else {
+      // Initialize with empty rules for new rule sets
+      setRules([]);
+    }
   }, [selectedRuleSet]);
+
+  // Save rules to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem(`rules_${selectedRuleSet}`, JSON.stringify(rules));
+  }, [rules, selectedRuleSet]);
 
   const updateRules = (rules: Rule[], id: string, updater: (rule: Rule) => Rule): Rule[] => {
     return rules.map(rule => {
@@ -85,12 +82,10 @@ const RuleEditor: React.FC = () => {
   };
 
   const handleAction = (ruleId: string, action: RuleAction) => {
-    if (!rules) return;
     if (action === 'nest') {
-      // Move this rule to be a child of the previous sibling at the same level
       const info = findParentAndIndexWithSiblings(rules, ruleId);
       if (info && info.index > 0) {
-        const { parent, index, siblings } = info;
+        const { index, siblings } = info;
         const prevSibling = siblings[index - 1];
         const [movingRule] = siblings.splice(index, 1);
         prevSibling.children.push(movingRule);
@@ -99,7 +94,6 @@ const RuleEditor: React.FC = () => {
       return;
     }
     if (action === 'add') {
-      // Add immediate child
       const nextName = getNextRuleName(rules);
       setRules(updateRules(rules, ruleId, rule => ({
         ...rule,
@@ -117,7 +111,6 @@ const RuleEditor: React.FC = () => {
       return;
     }
     if (action === 'delete') {
-      // Delete rule
       const parentAndIndex = findParentAndIndex(rules, ruleId);
       if (parentAndIndex) {
         const { parent, index } = parentAndIndex;
@@ -125,7 +118,6 @@ const RuleEditor: React.FC = () => {
           parent.children.splice(index, 1);
           setRules([...rules]);
         } else {
-          // top-level
           const newRules = [...rules];
           newRules.splice(index, 1);
           setRules(newRules);
@@ -141,7 +133,6 @@ const RuleEditor: React.FC = () => {
   };
 
   const handleSaveDesc = (ruleId: string) => {
-    if (!rules) return;
     setRules(updateRules(rules, ruleId, rule => ({ ...rule, description: editDescValue })));
     setEditDescId(null);
     setEditDescValue('');
@@ -149,8 +140,6 @@ const RuleEditor: React.FC = () => {
 
   // Un-nest: move rule up one level, after its parent
   function handleUnNest(ruleId: string) {
-    if (!rules) return;
-    // Find parent and index
     function findParentAndIndexWithGrandparent(rules: Rule[], id: string, grandparent: Rule | null = null, parentSiblings: Rule[] | null = null): any {
       for (let i = 0; i < rules.length; i++) {
         if (rules[i].id === id) {
@@ -163,14 +152,11 @@ const RuleEditor: React.FC = () => {
     }
     const info = findParentAndIndexWithGrandparent(rules, ruleId);
     if (info && info.parent && info.parentSiblings) {
-      // Remove from parent's children
       const [movingRule] = info.parent.children.splice(info.index, 1);
-      // Insert after parent in grandparent's children (or top-level)
       if (info.grandparent) {
         const parentIdx = info.parentSiblings.findIndex((r: Rule) => r.id === info.parent.id);
         info.parentSiblings.splice(parentIdx + 1, 0, movingRule);
       } else {
-        // parent is top-level
         const parentIdx = rules.findIndex((r: Rule) => r.id === info.parent.id);
         rules.splice(parentIdx + 1, 0, movingRule);
       }
@@ -180,14 +166,11 @@ const RuleEditor: React.FC = () => {
 
   // Reset rules to initial state from backend for current rule set
   function handleReset() {
-    fetch(`${RULESET_RULES_URL}?label=${encodeURIComponent(selectedRuleSet)}`)
-      .then(res => res.json())
-      .then(data => setRules(data));
+    setRules([]);
   }
 
   // Move rule up among siblings
   function moveRuleUp(ruleId: string) {
-    if (!rules) return;
     const info = findParentAndIndexWithSiblings(rules, ruleId);
     if (info && info.index > 0) {
       const { siblings, index } = info;
@@ -197,7 +180,6 @@ const RuleEditor: React.FC = () => {
   }
   // Move rule down among siblings
   function moveRuleDown(ruleId: string) {
-    if (!rules) return;
     const info = findParentAndIndexWithSiblings(rules, ruleId);
     if (info && info.index < info.siblings.length - 1) {
       const { siblings, index } = info;
@@ -205,8 +187,6 @@ const RuleEditor: React.FC = () => {
       setRules([...rules]);
     }
   }
-
-  if (!rules) return <Box sx={{ p: 3 }}><CircularProgress /></Box>;
 
   return (
     <Box sx={{ p: 1 }}>
