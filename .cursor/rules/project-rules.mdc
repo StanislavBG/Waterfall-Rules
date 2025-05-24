@@ -1,0 +1,67 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Rule Editor Prototype Requirements
+
+## Rule Structure 
+The editor should support a hierarchical rule structure as follows:
+
+- Default 
+```
+## Rule Set: Default
+[Rule-1] Suffix + First Name + Last Name + Email  
+    [Rule-2] First Name + Last Name + Email  
+        [Rule-3] First Name + Email 
+            [Rule-4] Email
+        OR
+        [Rule-5] Last Name + Email 
+            [Rule-4] Email 
+OR
+[Rule-6] Suffix + First Name + Last Name + Phone
+    [Rule-7] First Name + Last Name + Phone  
+        [Rule-8] First Name + Phone 
+            [Rule-9] Phone
+        OR
+        [Rule-10] Last Name + Phone 
+            [Rule-9] Phone 
+OR
+[Rule-11] Suffix + First Name + Last Name + Address 
+    [Rule-12] First Name + Last Name + Address  
+        [Rule-13] First Name + Address 
+OR
+[Rule-15] Party-Identifier - CRM Contact Id 
+OR 
+[Rule-16] Party-Identifier - External Key 
+```
+- Empty Rule 
+```
+## Rule Set: Empty Rule
+```
+- Current Customer 
+```
+## Rule Set: Current Customer
+[Rule-1] First Name + Last Name + Email  
+OR
+[Rule-2] First Name + Last Name + Phone  
+OR
+[Rule-3] First Name + Last Name + Address  
+OR
+[Rule-4] Party-Identifier - CRM Contact Id 
+OR
+[Rule-5] Party-Identifier - External Key 
+```
+
+## UI Requirements
+
+### Rule Management
+- [Button-1] Add a top-level rule
+- [Button-2] Nest a rule under an existing rule (button placed to the left of the rule)
+
+### Rule Structure Features
+- Support for top-level rules
+- Support for nested rules
+- Support for OR operators between rules
+- Visual hierarchy to show rule relationships
+

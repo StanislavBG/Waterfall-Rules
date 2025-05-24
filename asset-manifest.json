@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Waterfall-Rules/static/css/main.e6c13ad2.css",
+    "main.js": "/Waterfall-Rules/static/js/main.26786c40.js",
+    "static/js/453.279516ff.chunk.js": "/Waterfall-Rules/static/js/453.279516ff.chunk.js",
+    "index.html": "/Waterfall-Rules/index.html",
+    "main.e6c13ad2.css.map": "/Waterfall-Rules/static/css/main.e6c13ad2.css.map",
+    "main.26786c40.js.map": "/Waterfall-Rules/static/js/main.26786c40.js.map",
+    "453.279516ff.chunk.js.map": "/Waterfall-Rules/static/js/453.279516ff.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.26786c40.js"
+  ]
+}
