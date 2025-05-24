@@ -50,10 +50,6 @@ const RuleEditor: React.FC = () => {
   const [rules, setRules] = useState<Rule[] | null>(null);
   const [ruleSets, setRuleSets] = useState<string[]>([]);
   const [selectedRuleSet, setSelectedRuleSet] = useState<string>('');
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [newRuleDesc, setNewRuleDesc] = useState('');
-  const [selectedRuleId, setSelectedRuleId] = useState<string | null>(null);
-  const [actionType, setActionType] = useState<RuleAction | null>(null);
   const [editDescId, setEditDescId] = useState<string | null>(null);
   const [editDescValue, setEditDescValue] = useState('');
 
@@ -89,8 +85,6 @@ const RuleEditor: React.FC = () => {
   };
 
   const handleAction = (ruleId: string, action: RuleAction) => {
-    setSelectedRuleId(ruleId);
-    setActionType(action);
     if (!rules) return;
     if (action === 'nest') {
       // Move this rule to be a child of the previous sibling at the same level
@@ -102,8 +96,6 @@ const RuleEditor: React.FC = () => {
         prevSibling.children.push(movingRule);
         setRules([...rules]);
       }
-      setSelectedRuleId(null);
-      setActionType(null);
       return;
     }
     if (action === 'add') {
@@ -122,8 +114,6 @@ const RuleEditor: React.FC = () => {
           }
         ]
       })));
-      setSelectedRuleId(null);
-      setActionType(null);
       return;
     }
     if (action === 'delete') {
@@ -141,11 +131,8 @@ const RuleEditor: React.FC = () => {
           setRules(newRules);
         }
       }
-      setSelectedRuleId(null);
-      setActionType(null);
       return;
     }
-    setDialogOpen(true);
   };
 
   const handleEditDesc = (ruleId: string, desc: string) => {
@@ -164,12 +151,12 @@ const RuleEditor: React.FC = () => {
   function handleUnNest(ruleId: string) {
     if (!rules) return;
     // Find parent and index
-    function findParentAndIndexWithGrandparent(rules: Rule[], id: string, parent: Rule | null = null, grandparent: Rule | null = null, parentSiblings: Rule[] | null = null): any {
+    function findParentAndIndexWithGrandparent(rules: Rule[], id: string, grandparent: Rule | null = null, parentSiblings: Rule[] | null = null): any {
       for (let i = 0; i < rules.length; i++) {
         if (rules[i].id === id) {
-          return { parent, index: i, grandparent, parentSiblings };
+          return { parent: rules[i], index: i, grandparent, parentSiblings };
         }
-        const found = findParentAndIndexWithGrandparent(rules[i].children, id, rules[i], parent, rules);
+        const found = findParentAndIndexWithGrandparent(rules[i].children, id, rules[i], rules);
         if (found) return found;
       }
       return null;
