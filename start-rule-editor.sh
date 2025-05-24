@@ -1,2 +1,2 @@
 #!/bin/bash
-cd "$(dirname "$0")/rule-editor" && npm start 
+cd "$(dirname "$0")" && npm start 
