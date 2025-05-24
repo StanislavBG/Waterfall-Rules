@@ -104,19 +104,21 @@ const RuleComponent: React.FC<RuleComponentProps> = ({ rule, level, onAction, on
               </Tooltip>
             )}
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography 
-                sx={{ 
-                  fontWeight: 500, 
-                  mr: 1, 
-                  fontSize: slim ? 15 : 17,
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  maxWidth: 180
-                }}
-              >
-                [{rule.name}]
-              </Typography>
+              <Tooltip title={`[${rule.name}]`} placement="top" arrow>
+                <Typography 
+                  sx={{ 
+                    fontWeight: 500, 
+                    mr: 1, 
+                    fontSize: slim ? 15 : 17,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    maxWidth: 180
+                  }}
+                >
+                  [{rule.name}]
+                </Typography>
+              </Tooltip>
               {editDescId === rule.id ? (
                 <>
                   <TextField
@@ -131,20 +133,22 @@ const RuleComponent: React.FC<RuleComponentProps> = ({ rule, level, onAction, on
                 </>
               ) : (
                 <>
-                  <Typography 
-                    sx={{ 
-                      fontStyle: 'italic', 
-                      color: '#555', 
-                      mr: 1, 
-                      fontSize: slim ? 14 : 16,
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      maxWidth: 260
-                    }}
-                  >
-                    {rule.description}
-                  </Typography>
+                  <Tooltip title={rule.description} placement="top" arrow>
+                    <Typography 
+                      sx={{ 
+                        fontStyle: 'italic', 
+                        color: '#555', 
+                        mr: 1, 
+                        fontSize: slim ? 14 : 16,
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        maxWidth: 260
+                      }}
+                    >
+                      {rule.description}
+                    </Typography>
+                  </Tooltip>
                   <IconButton onClick={() => onEditDesc(rule.id, rule.description)} size={slim ? 'small' : 'medium'}>
                     <EditIcon fontSize={slim ? 'small' : 'medium'} />
                   </IconButton>
