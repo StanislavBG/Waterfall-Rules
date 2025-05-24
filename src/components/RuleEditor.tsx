@@ -4,9 +4,10 @@ import AddIcon from '@mui/icons-material/Add';
 import { Rule, RuleAction } from '../types/Rule';
 import RuleComponent from './RuleComponent';
 import { motion } from 'framer-motion';
+import { initialRules } from '../utils/initialRules';
 
-// Default rule sets
-const DEFAULT_RULE_SETS = ['Default Rules', 'Custom Rules'];
+// Default rule sets from initialRules
+const DEFAULT_RULE_SETS = Object.keys(initialRules);
 
 const getNextRuleName = (rules: Rule[]): string => {
   let max = 0;
@@ -59,8 +60,8 @@ const RuleEditor: React.FC = () => {
     if (savedRules) {
       setRules(JSON.parse(savedRules));
     } else {
-      // Initialize with empty rules for new rule sets
-      setRules([]);
+      // Initialize with initial rules for the selected rule set
+      setRules(initialRules[selectedRuleSet]);
     }
   }, [selectedRuleSet]);
 
@@ -164,9 +165,9 @@ const RuleEditor: React.FC = () => {
     }
   }
 
-  // Reset rules to initial state from backend for current rule set
+  // Reset rules to initial state for current rule set
   function handleReset() {
-    setRules([]);
+    setRules(initialRules[selectedRuleSet]);
   }
 
   // Move rule up among siblings
