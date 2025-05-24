@@ -150,31 +150,32 @@ const RuleComponent: React.FC<RuleComponentProps> = ({ rule, level, onAction, on
                 </Tooltip>
               )}
             </Box>
-            <Tooltip title="Add Child Rule">
-              <IconButton
-                size={slim ? 'small' : 'medium'}
-                onClick={() => onAction(rule.id, 'add')}
-                sx={{ mr: 0.5, minWidth: slim ? 28 : 36, p: slim ? 0.5 : 1 }}
-              >
-                <AddIcon fontSize={slim ? 'small' : 'medium'} />
-              </IconButton>
-            </Tooltip>
-            {!editDescId && (
-              <IconButton onClick={() => onEditDesc(rule.id, rule.description)} size={slim ? 'small' : 'medium'} sx={{ mr: 1 }}>
-                <EditIcon fontSize={slim ? 'small' : 'medium'} />
-              </IconButton>
-            )}
-            <Box sx={{ flexGrow: 1 }} />
-            <Tooltip title="Delete Rule">
-              <IconButton
-                size={slim ? 'small' : 'medium'}
-                onClick={() => onAction(rule.id, 'delete')}
-                color="error"
-                sx={{ minWidth: slim ? 28 : 36, p: slim ? 0.5 : 1 }}
-              >
-                <DeleteIcon fontSize={slim ? 'small' : 'medium'} />
-              </IconButton>
-            </Tooltip>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Tooltip title="Add Child Rule">
+                <IconButton
+                  size={slim ? 'small' : 'medium'}
+                  onClick={() => onAction(rule.id, 'add')}
+                  sx={{ mr: 0.5, minWidth: slim ? 28 : 36, p: slim ? 0.5 : 1 }}
+                >
+                  <AddIcon fontSize={slim ? 'small' : 'medium'} />
+                </IconButton>
+              </Tooltip>
+              {!editDescId && (
+                <IconButton onClick={() => onEditDesc(rule.id, rule.description)} size={slim ? 'small' : 'medium'} sx={{ mr: 0.5 }}>
+                  <EditIcon fontSize={slim ? 'small' : 'medium'} />
+                </IconButton>
+              )}
+              <Tooltip title="Delete Rule">
+                <IconButton
+                  size={slim ? 'small' : 'medium'}
+                  onClick={() => onAction(rule.id, 'delete')}
+                  color="error"
+                  sx={{ minWidth: slim ? 28 : 36, p: slim ? 0.5 : 1 }}
+                >
+                  <DeleteIcon fontSize={slim ? 'small' : 'medium'} />
+                </IconButton>
+              </Tooltip>
+            </Box>
           </Paper>
         </motion.div>
       </AnimatePresence>
