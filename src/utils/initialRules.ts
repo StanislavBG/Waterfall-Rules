@@ -9,7 +9,7 @@ const createRule = (name: string, description: string, children: Rule[] = [], is
 });
 
 export const initialRules: { [key: string]: Rule[] } = {
-  'Default Rules': [
+  'Default': [
     createRule('Rule-1', 'Suffix + First Name + Last Name + Email', [
       createRule('Rule-2', 'First Name + Last Name + Email', [
         createRule('Rule-3', 'First Name + Email', [
@@ -37,6 +37,13 @@ export const initialRules: { [key: string]: Rule[] } = {
     ], true),
     createRule('Rule-15', 'Party-Identifier - CRM Contact Id', [], true),
     createRule('Rule-16', 'Party-Identifier - External Key')
+  ],
+  'Account': [
+    createRule('Rule-1', 'Account Number + Account Name', [], true),
+    createRule('Rule-2', 'Account Name + Tax ID', [], true),
+    createRule('Rule-3', 'Account Number + Tax ID', [], true),
+    createRule('Rule-4', 'Party-Identifier - CRM Account Id', [], true),
+    createRule('Rule-5', 'Party-Identifier - External Key')
   ],
   'Empty Rule': [],
   'Current Customer': [

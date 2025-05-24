@@ -52,6 +52,13 @@ OR
 OR
 [Rule-5] Party-Identifier - External Key 
 ```
+- Account Rule 
+```
+## Rule Set: Account Rule
+[Rule-1] DUNS Number
+    [Rule-2] (Med Fuzzy) Account Name AND Address-Line-1 AND City AND Country 
+        [Rule-3] (High Fuzzy) Account Name AND City AND Country
+```
 
 ## UI Requirements
 
