@@ -142,28 +142,33 @@ const RuleEditor: React.FC = () => {
 
   // Un-nest: move rule up one level, after its parent
   function handleUnNest(ruleId: string) {
-    function findParentAndIndexWithGrandparent(rules: Rule[], id: string, grandparent: Rule | null = null, parentSiblings: Rule[] | null = null): any {
+    function unNest(rules: Rule[]): Rule[] {
       for (let i = 0; i < rules.length; i++) {
-        if (rules[i].id === id) {
-          return { parent: rules[i], index: i, grandparent, parentSiblings };
+        const rule = rules[i];
+        // Look for the rule in children
+        const childIdx = rule.children.findIndex(child => child.id === ruleId);
+        if (childIdx !== -1) {
+          // Found the rule to un-nest
+          const newChildren = [...rule.children];
+          const [movingRule] = newChildren.splice(childIdx, 1);
+          // Insert after the parent in the current level
+          const newRules = [...rules];
+          newRules[i] = { ...rule, children: newChildren };
+          newRules.splice(i + 1, 0, movingRule);
+          return newRules;
+        } else {
+          // Recurse into children
+          const updatedChildren = unNest(rule.children);
+          if (updatedChildren !== rule.children) {
+            const newRules = [...rules];
+            newRules[i] = { ...rule, children: updatedChildren };
+            return newRules;
+          }
         }
-        const found = findParentAndIndexWithGrandparent(rules[i].children, id, rules[i], rules);
-        if (found) return found;
       }
-      return null;
+      return rules;
     }
-    const info = findParentAndIndexWithGrandparent(rules, ruleId);
-    if (info && info.parent && info.parentSiblings) {
-      const [movingRule] = info.parent.children.splice(info.index, 1);
-      if (info.grandparent) {
-        const parentIdx = info.parentSiblings.findIndex((r: Rule) => r.id === info.parent.id);
-        info.parentSiblings.splice(parentIdx + 1, 0, movingRule);
-      } else {
-        const parentIdx = rules.findIndex((r: Rule) => r.id === info.parent.id);
-        rules.splice(parentIdx + 1, 0, movingRule);
-      }
-      setRules([...rules]);
-    }
+    setRules(rules => unNest(rules));
   }
 
   // Reset rules to initial state for current rule set
