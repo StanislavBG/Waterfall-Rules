@@ -43,7 +43,7 @@ jobs:
         if: false  # Disabled for now since we don't have tests yet
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build
           path: build/
