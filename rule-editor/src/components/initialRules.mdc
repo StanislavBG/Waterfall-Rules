@@ -1,0 +1,20 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+[Rule-1] Suffix + First Name + Last Name + Email  
+    [Rule-2] First Name + Last Name + Email  
+        [Rule-3] First Name + Email 
+            [Rule-4] Email
+        OR
+        [Rule-5] Last Name + Email 
+            [Rule-4] Email 
+OR
+[Rule-6] Suffix + First Name + Last Name + Phone
+    [Rule-7] First Name + Last Name + Phone  
+        [Rule-8] First Name + Phone 
+            [Rule-9] Email
+        OR
+        [Rule-10] Last Name + Phone 
+            [Rule-9] Email 
