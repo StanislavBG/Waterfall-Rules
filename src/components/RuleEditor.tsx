@@ -5,6 +5,7 @@ import { Rule, RuleAction } from '../types/Rule';
 import RuleComponent from './RuleComponent';
 import { motion } from 'framer-motion';
 import { initialRules } from '../utils/initialRules';
+import { v4 as uuidv4 } from 'uuid';
 
 // Default rule sets from initialRules
 const DEFAULT_RULE_SETS = Object.keys(initialRules);
@@ -101,7 +102,7 @@ const RuleEditor: React.FC = () => {
         children: [
           ...rule.children,
           {
-            id: `${nextName}-${Date.now()}`,
+            id: `${nextName}-${uuidv4()}`,
             name: nextName,
             description: 'Description...',
             children: [],

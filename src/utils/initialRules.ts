@@ -1,7 +1,8 @@
 import { Rule } from '../types/Rule';
+import { v4 as uuidv4 } from 'uuid';
 
 const createRule = (name: string, description: string, children: Rule[] = [], isOr: boolean = false): Rule => ({
-  id: `${name}-${Date.now()}`,
+  id: `${name}-${uuidv4()}`,
   name,
   description,
   children,
