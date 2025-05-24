@@ -1,25 +1,31 @@
-# Waterfall Demo
+# Waterfall Rules Editor
 
-A React-based application for managing and editing rules with a backend API.
+A React-based rule editor that allows you to create, edit, and manage hierarchical rules with support for nested structures and OR operators.
 
 ## Features
 
-- Rule management interface
-- HEIC image conversion
-- RESTful API backend
-- Modern Material-UI interface
+- Create and manage hierarchical rules
+- Support for nested rule structures
+- OR operator between rules
+- Visual hierarchy to show rule relationships
+- Edit rule descriptions
+- Move rules up/down
+- Nest/Un-nest rules
+- Reset to original ruleset
 
-## Prerequisites
+## Getting Started
 
-- Node.js (v14 or higher)
-- npm (v6 or higher)
+### Prerequisites
 
-## Installation
+- Node.js 18.x or later
+- npm 8.x or later
+
+### Installation
 
 1. Clone the repository:
 ```bash
-git clone [repository-url]
-cd Waterfall_Demo
+git clone https://github.com/StanislavBG/Waterfall-Rules.git
+cd Waterfall-Rules
 ```
 
 2. Install dependencies:
@@ -27,49 +33,37 @@ cd Waterfall_Demo
 npm install
 ```
 
-## Running the Application
-
-### Development Mode
-
-1. Start the backend server:
+3. Start the development server:
 ```bash
+# Start the backend server
 ./start-backend.sh
-```
 
-2. Start the frontend development server:
-```bash
+# In a new terminal, start the frontend
 ./start-rule-editor.sh
 ```
 
 The application will be available at:
 - Frontend: http://localhost:3000
-- Backend API: http://localhost:5000
+- Backend: http://localhost:5000
 
-### Production Build
+## Development
 
-To create a production build:
-
-```bash
-npm run build
-```
-
-The build artifacts will be stored in the `build/` directory.
+- Frontend: React with TypeScript
+- Backend: Node.js with Express
+- UI: Material-UI (MUI)
+- Animations: Framer Motion
 
 ## Project Structure
 
-- `/src` - Frontend React application source code
-- `/public` - Static assets
-- `rule-editor-server.js` - Backend API server
-- `start-backend.sh` - Script to start the backend server
-- `start-rule-editor.sh` - Script to start the frontend development server
-
-## API Endpoints
-
-- `GET /api/rule-sets` - Get all rule sets
-- `GET /api/ruleset/:id` - Get rules for a specific rule set
-- `POST /api/ruleset` - Create a new rule
-- `PUT /api/ruleset/:id` - Update a rule
-- `DELETE /api/ruleset/:id` - Delete a rule
+```
+├── src/                    # Frontend source code
+│   ├── components/        # React components
+│   ├── types/            # TypeScript type definitions
+│   └── App.tsx           # Main application component
+├── .github/              # GitHub Actions workflows
+├── public/               # Static files
+└── rule-editor-server.js # Backend server
+```
 
 ## Contributing
 
@@ -81,4 +75,4 @@ The build artifacts will be stored in the `build/` directory.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
