@@ -103,7 +103,7 @@ const RuleComponent: React.FC<RuleComponentProps> = ({ rule, level, onAction, on
                 </IconButton>
               </Tooltip>
             )}
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, minWidth: 0 }}>
               <Tooltip title={`[${rule.name}]`} placement="top" arrow>
                 <Typography 
                   sx={{ 
@@ -113,7 +113,7 @@ const RuleComponent: React.FC<RuleComponentProps> = ({ rule, level, onAction, on
                     whiteSpace: 'nowrap',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
-                    maxWidth: 180
+                    maxWidth: '100%'
                   }}
                 >
                   [{rule.name}]
@@ -132,39 +132,39 @@ const RuleComponent: React.FC<RuleComponentProps> = ({ rule, level, onAction, on
                   </IconButton>
                 </>
               ) : (
-                <>
-                  <Tooltip title={rule.description} placement="top" arrow>
-                    <Typography 
-                      sx={{ 
-                        fontStyle: 'italic', 
-                        color: '#555', 
-                        mr: 1, 
-                        fontSize: slim ? 14 : 16,
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        maxWidth: 260
-                      }}
-                    >
-                      {rule.description}
-                    </Typography>
-                  </Tooltip>
-                  <IconButton onClick={() => onEditDesc(rule.id, rule.description)} size={slim ? 'small' : 'medium'}>
-                    <EditIcon fontSize={slim ? 'small' : 'medium'} />
-                  </IconButton>
-                </>
+                <Tooltip title={rule.description} placement="top" arrow>
+                  <Typography 
+                    sx={{ 
+                      fontStyle: 'italic', 
+                      color: '#555', 
+                      mr: 1, 
+                      fontSize: slim ? 14 : 16,
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      maxWidth: '100%'
+                    }}
+                  >
+                    {rule.description}
+                  </Typography>
+                </Tooltip>
               )}
             </Box>
-            <Box sx={{ flexGrow: 1 }} />
             <Tooltip title="Add Child Rule">
               <IconButton
                 size={slim ? 'small' : 'medium'}
                 onClick={() => onAction(rule.id, 'add')}
-                sx={{ mr: 1, minWidth: slim ? 28 : 36, p: slim ? 0.5 : 1 }}
+                sx={{ mr: 0.5, minWidth: slim ? 28 : 36, p: slim ? 0.5 : 1 }}
               >
                 <AddIcon fontSize={slim ? 'small' : 'medium'} />
               </IconButton>
             </Tooltip>
+            {!editDescId && (
+              <IconButton onClick={() => onEditDesc(rule.id, rule.description)} size={slim ? 'small' : 'medium'} sx={{ mr: 1 }}>
+                <EditIcon fontSize={slim ? 'small' : 'medium'} />
+              </IconButton>
+            )}
+            <Box sx={{ flexGrow: 1 }} />
             <Tooltip title="Delete Rule">
               <IconButton
                 size={slim ? 'small' : 'medium'}
